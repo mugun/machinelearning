@@ -29,6 +29,8 @@ def createDataSet():
     return dataSet, labels
 
 def splitDataSet(dataSet,axis,value):
+    '''此段代码应该这样理解，以数据的某一列作为特征值，来判断输入的数值的值
+    和原训练集中符合的部分'''
     retDataSet=[]
     for featVec in dataSet:
         if featVec[axis] == value:
@@ -44,7 +46,10 @@ def chooseBestFeatureToSplit(dataSet):
     bestFeature=-1
     for i in range(numberFeatures):
         #下列两行创建唯一的分类标签列表
+        #print(example[i]for example in dataSet)
         featList=[example[i]for example in dataSet]
+        #print(example)
+        print(featList)
         uniqueVals=set(featList)
         newEntropy=0.0
         #计算每种划分方式的信息熵
@@ -113,5 +118,5 @@ if __name__ =='__main__':
     #showlabel(labels)
     print(classify(myTree,labelll,[1,1]))
     #此处需要注意的是Python的引用问题，按照书上代码没有labels进行复制，这样子在classify时候的labels的内容是已经发生了改变了
-    #不知道是py36和PY26的区别还是书上代码编写有无，反正在这里应该注意一下
+    #不知道是py36和PY27的区别还是书上代码编写有误，反正在这里应该注意一下
         
