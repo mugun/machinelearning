@@ -19,9 +19,14 @@ def calcShannonEnt(dataSet):
     return shannonEnt
 
 def createDataSet():
-    dataSet=[[1,1,'yes'],[1,1,'yes'],[1,0,'no'],[0,1,'no'],[0,1,'no']]
-    labels=['no surfacing','flippers']
-    return dataSet,labels
+    dataSet = [[1, 1, 'yes'],
+               [1, 1, 'yes'],
+               [1, 0, 'no'],
+               [0, 1, 'no'],
+               [0, 1, 'no']]
+    labels = ['no surfacing','flippers']
+    #change to discrete values
+    return dataSet, labels
 
 def splitDataSet(dataSet,axis,value):
     retDataSet=[]
@@ -83,14 +88,30 @@ def createTree(dataSet,labels):
         myTree[bestFeatLabel][value]=createTree(splitDataSet(dataSet,bestFeat,value),subLabels)
     return myTree
     
-
+def classify(inputTree,featLabels,testVec):
+    firstStrSide=list(inputTree.keys())
+    firstStr=firstStrSide[0]
+    secondDict=inputTree[firstStr]
+    featIndex=featLabels.index(firstStr)
+    for key in secondDict.keys():
+        if testVec[featIndex]==key:
+            if type(secondDict[key]).__name__=='dict':
+                classLabel=classify(secondDict[key],featLabels,testVec)
+            else:
+                classLabel=secondDict[key]
+    return classLabel
+def showlabel(featLabels):
+    print(featLabels)
+    
+    
 if __name__ =='__main__':
     myDat,labels=createDataSet()
-    #print(myDat)
-    #print(calcShannonEnt(myDat))
-    #print(splitDataSet(myDat,0,1))
-    #print(splitDataSet(myDat,0,0))
-    #print(chooseBestFeatureToSplit(myDat))
+    #labell = ['no surfacing','flippers']
+    labelll=labels.copy()
     myTree=createTree(myDat,labels)
-    print(myTree)
+    #showlabel(labell)
+    #showlabel(labels)
+    print(classify(myTree,labelll,[1,1]))
+    #此处需要注意的是Python的引用问题，按照书上代码没有labels进行复制，这样子在classify时候的labels的内容是已经发生了改变了
+    #不知道是py36和PY26的区别还是书上代码编写有无，反正在这里应该注意一下
         
