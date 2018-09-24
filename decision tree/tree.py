@@ -107,6 +107,17 @@ def classify(inputTree,featLabels,testVec):
     return classLabel
 def showlabel(featLabels):
     print(featLabels)
+
+def storeTree(inputTree,filename):
+    import pickle as pick
+    fw=open(filename,"wb+")
+    pick.dump(inputTree,fw)
+    fw.close()
+    
+def grabTree(filename):
+    import pickle as pick
+    fr=open(filename,'rb+')
+    return pick.load(fr)
     
     
 if __name__ =='__main__':
@@ -116,7 +127,10 @@ if __name__ =='__main__':
     myTree=createTree(myDat,labels)
     #showlabel(labell)
     #showlabel(labels)
-    print(classify(myTree,labelll,[1,1]))
+    storeTree(myTree,"classifyTree.txt")
+    print(grabTree("classifyTree.txt"))
+    #这两个方法方法在PY36中碰到了读取错误问题，应当注意PY36和PY27的文件读入输出区别
+    #print(classify(myTree,labelll,[1,1]))
     #此处需要注意的是Python的引用问题，按照书上代码没有labels进行复制，这样子在classify时候的labels的内容是已经发生了改变了
     #不知道是py36和PY27的区别还是书上代码编写有误，反正在这里应该注意一下
         
