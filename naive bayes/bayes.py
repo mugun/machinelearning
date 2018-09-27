@@ -34,11 +34,11 @@ def setOfWords2Vec(vocabList,inputSet):
     return returnVec
 
 def trainNB0(trainMatrix,trainCategory):
+    #此处是生成朴素贝叶斯分类器的关键
     numTrainDocs=len(trainMatrix)
     numWords=len(trainMatrix[0])
     pAbusive=sum(trainCategory)/float(numTrainDocs)
-    print(sum(trainCategory)/float(numTrainDocs))
-    print(trainCategory)
+    #求集合中出现1（侮辱词汇）的概率
     p0Num=np.ones(numWords)
     p1Num=np.ones(numWords)
     p0Denom=2.0
@@ -48,13 +48,18 @@ def trainNB0(trainMatrix,trainCategory):
             #进行向量相加
             p1Num+=trainMatrix[i]
             p1Denom+=sum(trainMatrix[i])
+            print(p1Num,p1Denom)
         else:
             p0Num+=trainMatrix[i]
             p0Denom+=sum(trainMatrix[i])
+          
     p1Vect=np.log(p1Num/p1Denom)
+   
+    #这里得到是一个矩阵，关于每个单词的出现情况的
     #这里使用的log方法应该是numpy中的而不是math中的
     #对每个元素做除法
     p0Vect=np.log(p0Num/p0Denom)
+    print(p1Vect,p0Vect)
     return p0Vect,p1Vect,pAbusive
             
 
@@ -95,6 +100,7 @@ if __name__=='__main__':
     trainMat=[]
     for postinDoc in listOPost:
         trainMat.append(setOfWords2Vec(myVocabList,postinDoc))
+    
     p0V,p1V,pAb=trainNB0(trainMat,listClasses)
     print(pAb)
     #testingNB()
